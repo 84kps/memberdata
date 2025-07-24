@@ -1,4 +1,4 @@
-const sheetURL = "YOUR_WEB_APP_URL_HERE"; // Replace with your Web App URL
+const sheetURL = "https://script.google.com/macros/s/AKfycbyAcpjRTLy0pkeI2PmRJWmh75dnJjF8vGJ0CMuF_V0nMACusMVCrYGP2jTsVv-zURKqWw/exec"; // Replace with your Web App URL
 
 fetch(sheetURL)
   .then(res => res.json())
