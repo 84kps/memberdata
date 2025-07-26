@@ -1,24 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Member Directory</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Shree 84 Samaj Family Members</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Shree 84 Samaj Members</h1>
-  <table id="memberTable">
-    <thead>
-      <tr><th>Name</th><th>Suburb</th></tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+  <h1>Shree 84 Samaj Family Members</h1>
+  <div id="membersTable"></div>
 
-  <div id="memberModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <div class="modal-body" id="modalBody"></div>
-    </div>
+  <!-- Popup Modal -->
+  <div id="modal" class="modal">
+    <div class="modal-content" id="modalContent"></div>
+    <span class="close" onclick="closeModal()">&times;</span>
   </div>
 
   <script src="script.js"></script>
