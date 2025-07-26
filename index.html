@@ -2,17 +2,38 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Shree 84 Samaj Family Members</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shree 84 Kadva Patidar Samaj - Melbourne</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Shree 84 Samaj Family Members</h1>
-  <div id="membersTable"></div>
 
-  <!-- Popup Modal -->
-  <div id="modal" class="modal">
-    <div class="modal-content" id="modalContent"></div>
-    <span class="close" onclick="closeModal()">&times;</span>
+  <header>
+    <h1>Shree 84 Kadva Patidar Samaj - Melbourne</h1>
+    <p>Family Member Directory</p>
+  </header>
+
+  <main>
+    <table id="memberTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Suburb</th>
+          <th>Village</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Filled by JS -->
+      </tbody>
+    </table>
+  </main>
+
+  <!-- Modal -->
+  <div id="memberModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <div id="modalBody"></div>
+    </div>
   </div>
 
   <script src="script.js"></script>
