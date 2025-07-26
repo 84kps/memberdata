@@ -1,4 +1,4 @@
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbz8ZFTpP1bg3Qtm8WlCHQoF3L9gI6QUYP2Z1f8AdWEfMpjtA7dq-CAjRMOOYaymrMFEUA/exec';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxMnizyi_VVi4jx3kkYRjqAHTO2a3nJRYaWp3EVf0qjd4C7ELW1w9zaulE73-cjUZ-CEg/exec';
 
 window.onload = () => {
   fetch(SHEET_URL)
