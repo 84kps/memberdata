@@ -11,19 +11,24 @@
   <header>
     <h1>Shree 84 Kadva Patidar Samaj - Melbourne</h1>
     <p>Family Member Directory</p>
+    <label class="toggle">
+      <input type="checkbox" id="languageToggle" />
+      <span class="slider"></span>
+      <span class="label-text">ગુજરાતી</span>
+    </label>
   </header>
 
   <main>
     <table id="memberTable">
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Suburb</th>
-          <th>Village</th>
+          <th data-en="Name" data-gu="નામ">Name</th>
+          <th data-en="Suburb" data-gu="ઉપનગર">Suburb</th>
+          <th data-en="Village" data-gu="ગામ">Village</th>
         </tr>
       </thead>
       <tbody>
-        <!-- Filled by JS -->
+        <!-- JS fills this -->
       </tbody>
     </table>
   </main>
