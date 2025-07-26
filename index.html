@@ -1,26 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Family Members</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Member Directory</title>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <h1>Shree 84 Samaj Kadva Patidar Family</h1>
-  <table id="memberTable">
-    <thead>
-      <tr><th>Name</th><th>Suburb</th></tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+  <div class="container">
+    <h1>Shree 84 Samaj Kadva Patidar Family</h1>
+    <table id="memberTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Suburb</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Members will be inserted here dynamically -->
+      </tbody>
+    </table>
+  </div>
 
-  <div id="modal" class="modal">
+  <!-- Modal -->
+  <div id="memberModal" class="modal">
     <div class="modal-content">
-      <span id="closeBtn" class="close">&times;</span>
-      <div id="memberDetails"></div>
+      <span class="close-button">&times;</span>
+      <div id="modalDetails"></div>
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="js/script.js"></script>
 </body>
 </html>
