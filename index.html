@@ -1,46 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Shree 84 Kadva Patidar Samaj - Melbourne</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Shree 84 Samaj Kadva Patidar Family</title>
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <header>
-    <h1>Shree 84 Kadva Patidar Samaj - Melbourne</h1>
-    <p>Family Member Directory</p>
-    <label class="toggle">
-      <input type="checkbox" id="languageToggle" />
-      <span class="slider"></span>
-      <span class="label-text">ગુજરાતી</span>
-    </label>
-  </header>
+<h1>Shree 84 Samaj Kadva Patidar Family - Melbourne</h1>
 
-  <main>
-    <table id="memberTable">
-      <thead>
-        <tr>
-          <th data-en="Name" data-gu="નામ">Name</th>
-          <th data-en="Suburb" data-gu="ઉપનગર">Suburb</th>
-          <th data-en="Village" data-gu="ગામ">Village</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- JS fills this -->
-      </tbody>
-    </table>
-  </main>
+<table id="memberTable" aria-label="Family Member List">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Address</th>
+      <th>Village</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Minimal data loaded here -->
+  </tbody>
+</table>
 
-  <!-- Modal -->
-  <div id="memberModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn">&times;</span>
-      <div id="modalBody"></div>
+<div id="memberModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-content">
+    <span class="close-btn" role="button" aria-label="Close">&times;</span>
+    <div id="modalBody">
+      <!-- Full member & spouse details here -->
     </div>
   </div>
+</div>
 
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

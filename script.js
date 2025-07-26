@@ -1,72 +1,151 @@
-const scriptURL = 'https://script.google.com/macros/s/AKfycbwMpqHDKB-NIZ27hjjk7UnoY_KgMFB_7iVbbqwvoe0Y4fGzM1VZIbKfEHu_AsrKx00upg/exec';
 const tableBody = document.querySelector("#memberTable tbody");
 const modal = document.getElementById("memberModal");
 const modalBody = document.getElementById("modalBody");
 const closeBtn = document.querySelector(".close-btn");
-const languageToggle = document.getElementById("languageToggle");
 
+// Define fields for main member and spouse for side-by-side display
+const mainFields = [
+  { label: "Name", key: "Name" },
+  { label: "Date of Birth", key: "DOB" },
+  { label: "Phone", key: "Phone" },
+  { label: "Email", key: "Email" },
+  { label: "Address", key: "Address" },
+  { label: "Village", key: "Village" },
+  { label: "Mosal", key: "Mosal" },
+  { label: "Occupation", key: "Occupation" },
+  { label: "Father's Name", key: "Father's Name" },
+  { label: "Mother's Name", key: "Mother's Name" },
+  { label: "Indian Address", key: "Indian address" },
+  { label: "Marital Status", key: "Marital status" }
+];
+
+const spouseFields = [
+  { label: "Name", key: "Name1" },
+  { label: "Date of Birth", key: "DOB1" },
+  { label: "Phone", key: "Phone1" },
+  { label: "Email", key: "Email1" },
+  { label: "Address", key: "Indian Address1" },
+  { label: "Village", key: "Village1" },
+  { label: "Mosal", key: "Mosal1" },
+  { label: "Occupation", key: "Occupation1" },
+  { label: "Father's Name", key: "Father's Name1" },
+  { label: "Mother's Name", key: "Mother's Name2" }
+];
+
+// Convert DOB to age string
+function getAge(dob) {
+  const birth = new Date(dob);
+  if (isNaN(birth)) return "";
+  const diff = Date.now() - birth.getTime();
+  return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+}
+
+const scriptURL = 'https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLhL0OsvpwOx24bdAN5He_RO6Rw5V3ocbEQEeretyn4iC8PiulW1Ms2zdOCkfI4oQCid5SK0YTXRhv-mFFKyociw6J3QJSpUkt4NiMyVoQN9mlbYKA1v6Uk8bOLNg7Q6S1heo6RQX2J3B4dgn_Rr5sAE3SKbpEynu_O0BdW3Z4PyF3s3qhX8HHdTxkaLJ4gGVz8V2_3vWfCqIh-WVovEt_UGE1kSCFNsHJmmLOKfaB2pvdqWVJ42tPn0jGCKdtV3nJBFm4NGnUEyTui2naJI8JaPaSDOuo4eMo9OjCdV&lib=MHnpweNuT6kWzrVxeb4EIfn3ussjxLWrt';
+
+let membersData = [];
+
+// Fetch all data once, display minimal in table
 fetch(scriptURL)
-  .then(res => res.json())
+  .then(resp => resp.json())
   .then(data => {
+    membersData = data;
+    tableBody.innerHTML = "";
     data.forEach(member => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td>${member.Name}</td>
-        <td>${member.Address}</td>
-        <td>${member.Village}</td>
+        <td>${member.Name || ""}</td>
+        <td>${member.Address || ""}</td>
+        <td>${member.Village || ""}</td>
       `;
       tr.addEventListener("click", () => showModal(member));
       tableBody.appendChild(tr);
     });
+  })
+  .catch(err => {
+    console.error("Fetch error:", err);
+    tableBody.innerHTML = '<tr><td colspan="3">Failed to load data.</td></tr>';
   });
 
+// Show modal with full data side-by-side
 function showModal(member) {
-  const getAge = dob => {
-    const birth = new Date(dob);
-    const diff = Date.now() - birth.getTime();
-    return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
-  };
+  let rows = "";
+  for (let i = 0; i < mainFields.length; i++) {
+    const label = mainFields[i].label;
+    const mainValRaw = member[mainFields[i].key] || "";
+    const spouseValRaw = spouseFields[i] ? (member[spouseFields[i].key] || "") : "";
+
+    // Convert DOB fields to age only
+    const mainVal = (mainFields[i].key.includes("DOB") && mainValRaw) ? `${getAge(mainValRaw)} yrs` : mainValRaw;
+    const spouseVal = (spouseFields[i] && spouseFields[i].key.includes("DOB") && spouseValRaw) ? `${getAge(spouseValRaw)} yrs` : spouseValRaw;
+
+    if (!mainVal && !spouseVal) continue;
+
+    rows += `
+      <tr>
+        <th>${label}</th>
+        <td>${mainVal || "-"}</td>
+        <td>${spouseVal || "-"}</td>
+      </tr>
+    `;
+  }
+
+  // Children section
+  let childrenHTML = "";
+  if (member.Children || member.Child1) {
+    childrenHTML += `<h3>Children</h3><table class="children-table" aria-label="Children Information"><tbody>`;
+    if (member.Child1) {
+      const childAge = member["Child DOB"] ? `${getAge(member["Child DOB"])} yrs` : member["Child DOB"] || "";
+      childrenHTML += `
+        <tr>
+          <th>Child Name</th><td>${member.Child1}</td>
+          <th>Child DOB</th><td>${childAge}</td>
+        </tr>
+      `;
+    }
+    childrenHTML += `</tbody></table>`;
+  }
 
   modalBody.innerHTML = `
-    <img src="${member.Image || 'https://via.placeholder.com/150'}" alt="${member.Name}" class="member-photo">
-    <table class="details-table">
-      <tr><th>Name</th><td>${member.Name}</td></tr>
-      <tr><th>Date of Birth</th><td>${member.DOB}</td></tr>
-      <tr><th>Phone</th><td>${member.Phone}</td></tr>
-      <tr><th>Email</th><td>${member.Email}</td></tr>
-      <tr><th>Address</th><td>${member.Address}</td></tr>
-      <tr><th>Village</th><td>${member.Village}</td></tr>
-      <tr><th>Mosal</th><td>${member.Mosal}</td></tr>
-      <tr><th>Occupation</th><td>${member.Occupation}</td></tr>
-      <tr><th>Father's Name</th><td>${member["Father's Name"]}</td></tr>
-      <tr><th>Mother's Name</th><td>${member["Mother's Name"]}</td></tr>
-      <tr><th>Indian Address</th><td>${member["Indian address"]}</td></tr>
-      <tr><th>Marital Status</th><td>${member["Marital status"]}</td></tr>
-      <tr><th>Spouse Name</th><td>${member.Name1 || ""}</td></tr>
-      <tr><th>Spouse DOB</th><td>${member.DOB1 || ""}</td></tr>
-      <tr><th>Spouse Phone</th><td>${member.Phone1 || ""}</td></tr>
-      <tr><th>Spouse Email</th><td>${member.Email1 || ""}</td></tr>
-      <tr><th>Spouse Village</th><td>${member.Village1 || ""}</td></tr>
-      <tr><th>Spouse Mosal</th><td>${member.Mosal1 || ""}</td></tr>
-      <tr><th>Spouse Occupation</th><td>${member.Occupation1 || ""}</td></tr>
-      <tr><th>Spouse Father's Name</th><td>${member["Father's Name1"] || ""}</td></tr>
-      <tr><th>Spouse Mother's Name</th><td>${member["Mother's Name2"] || ""}</td></tr>
-      <tr><th>Spouse Indian Address</th><td>${member["Indian Address1"] || ""}</td></tr>
-      <tr><th>Children</th><td>${member.Children || ""}</td></tr>
-      <tr><th>Child1</th><td>${member.Child1 || ""}</td></tr>
-      <tr><th>Child DOB</th><td>${member["Child DOB"] || ""} (${member["Child DOB"] ? getAge(member["Child DOB"]) + ' yrs' : ''})</td></tr>
-    </table>
+    <div class="popup-image">
+      <img src="${member.Image || 'https://via.placeholder.com/180'}" alt="${member.Name || 'No Image'}" />
+    </div>
+    <div class="popup-details">
+      <h2>${member.Name || ""} & ${member.Name1 || ""}</h2>
+      <table class="details-table" aria-label="Member and Spouse Details">
+        <thead>
+          <tr>
+            <th></th>
+            <th>${member.Name || "Member"}</th>
+            <th>${member.Name1 || "Spouse"}</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows}
+        </tbody>
+      </table>
+      ${childrenHTML}
+    </div>
   `;
+
   modal.style.display = "block";
+  modal.setAttribute('aria-hidden', 'false');
 }
 
-closeBtn.onclick = () => modal.style.display = "none";
-window.onclick = e => e.target == modal && (modal.style.display = "none");
+closeBtn.addEventListener('click', () => {
+  modal.style.display = "none";
+  modal.setAttribute('aria-hidden', 'true');
+});
 
-languageToggle.addEventListener("change", () => {
-  const ths = document.querySelectorAll("th");
-  ths.forEach(th => {
-    const text = languageToggle.checked ? th.getAttribute("data-gu") : th.getAttribute("data-en");
-    if (text) th.textContent = text;
-  });
+window.addEventListener('click', e => {
+  if (e.target === modal) {
+    modal.style.display = "none";
+    modal.setAttribute('aria-hidden', 'true');
+  }
+});
+
+window.addEventListener('keydown', e => {
+  if (e.key === "Escape" && modal.style.display === "block") {
+    modal.style.display = "none";
+    modal.setAttribute('aria-hidden', 'true');
+  }
 });

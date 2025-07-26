@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Shree 84 Samaj Kadva Patidar Family</title>
+<style>
+  /* ====== Reset and base styles ====== */
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0; background: #f0f2f5; color: #333;
+  }
+  h1 {
+    text-align: center; margin: 20px 0; font-weight: 700;
+  }
+  /* ===== Table styles ===== */
+  table {
+    width: 95%;
+    max-width: 900px;
+    margin: 20px auto 50px auto;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    border-radius: 6px;
+    overflow-x: auto;
+  }
+  thead tr {
+    background: #9c27b0;
+    color: white;
+  }
+  th, td {
+    padding: 14px 20px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+  tbody tr:hover {
+    background: #f3e6ff;
+    cursor: pointer;
+  }
+
+  /* ===== Modal Overlay ===== */
+  #memberModal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    overflow-y: auto;
+    padding: 40px 20px;
+    box-sizing: border-box;
+  }
+
+  /* ===== Modal Content ===== */
+  .modal-content {
+    background: white;
+    max-width: 900px;
+    margin: auto;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(156, 39, 176, 0.4);
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+    position: relative;
+    padding: 20px 20px 30px 20px; /* uniform padding */
+  }
+
+  /* ===== Close Button ===== */
+  .close-btn {
+    position: absolute;
+    top: 18px;
+    right: 22px;
+    font-size: 32px;
+    font-weight: 700;
+    color: #9c27b0;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.3s;
+  }
+  .close-btn:hover {
+    color: #6a1b9a;
+  }
+
+  /* ===== Image Container ===== */
+  .popup-image {
+    flex: 0 0 180px;
+    max-width: 180px;
+    background: #fafafa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    border-right: 1px solid #eee;
+  }
+  .popup-image img {
+    max-width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3);
+    object-fit: cover;
+  }
+
+  /* ===== Details container ===== */
+  .popup-details {
+    flex: 1 1 auto;
+    padding: 0 15px 30px 15px; /* reduced horizontal padding to fit table fully */
+    overflow-y: auto;
+  }
+  .popup-details h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-weight: 800;
+    color: #9c27b0;
+    font-size: 2rem;
+  }
+
+  /* ===== Member & Spouse Details Table ===== */
+  .details-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    table-layout: fixed; /* fill width evenly */
+  }
+  .details-table th,
+  .details-table td {
+    border: 1px solid #ddd;
+    padding: 8px 10px;
+    vertical-align: top;
+    word-wrap: break-word;
+  }
+  .details-table th {
+    width: 140px; /* fixed width for label column */
+    background-color: #f9f4fb;
+    color: #7b1fa2;
+    font-weight: 600;
+    text-align: left;
+  }
+  .details-table td {
+    width: calc((100% - 140px) / 2); /* split remaining width equally */
+    background: #fff;
+  }
+
+  /* Children table */
+  .children-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  .children-table th, .children-table td {
+    border: 1px solid #ddd;
+    padding: 6px 10px;
+  }
+  .children-table th {
+    background-color: #f9f4fb;
+    color: #7b1fa2;
+    font-weight: 600;
+    width: 120px;
+  }
+
+  /* Responsive */
+  @media (max-width: 720px) {
+    .modal-content {
+      flex-direction: column;
+    }
+    .popup-image {
+      max-width: 100%;
+      border-right: none;
+      border-bottom: 1px solid #eee;
+      padding: 10px;
+    }
+    .popup-details {
+      padding: 20px 15px 30px 15px;
+    }
+    .details-table th {
+      width: 140px;
+    }
+    .details-table td {
+      width: auto;
+    }
+  }
+</style>
+</head>
+<body>
+
+<h1>Shree 84 Samaj Kadva Patidar Family - Melbourne</h1>
+
+<table id="memberTable" aria-label="Family Member List">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Address</th>
+      <th>Village</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Populated dynamically -->
+  </tbody>
+</table>
+
+<div id="memberModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-content">
+    <span class="close-btn" role="button" aria-label="Close">&times;</span>
+    <div id="modalBody">
+      <!-- Populated dynamically -->
+    </div>
+  </div>
+</div>
+
+<script>
+  const tableBody = document.querySelector("#memberTable tbody");
+  const modal = document.getElementById("memberModal");
+  const modalBody = document.getElementById("modalBody");
+  const closeBtn = document.querySelector(".close-btn");
+
+  // Fields for main member and spouse to display side-by-side
+  const mainFields = [
+    { label: "Name", key: "Name" },
+    { label: "Date of Birth", key: "DOB" },
+    { label: "Phone", key: "Phone" },
+    { label: "Email", key: "Email" },
+    { label: "Address", key: "Address" },
+    { label: "Village", key: "Village" },
+    { label: "Mosal", key: "Mosal" },
+    { label: "Occupation", key: "Occupation" },
+    { label: "Father's Name", key: "Father's Name" },
+    { label: "Mother's Name", key: "Mother's Name" },
+    { label: "Indian Address", key: "Indian address" },
+    { label: "Marital Status", key: "Marital status" }
+  ];
+
+  const spouseFields = [
+    { label: "Name", key: "Name1" },
+    { label: "Date of Birth", key: "DOB1" },
+    { label: "Phone", key: "Phone1" },
+    { label: "Email", key: "Email1" },
+    { label: "Address", key: "Indian Address1" },
+    { label: "Village", key: "Village1" },
+    { label: "Mosal", key: "Mosal1" },
+    { label: "Occupation", key: "Occupation1" },
+    { label: "Father's Name", key: "Father's Name1" },
+    { label: "Mother's Name", key: "Mother's Name2" }
+  ];
+
+  function getAge(dob) {
+    const birth = new Date(dob);
+    if (isNaN(birth)) return "";
+    const diff = Date.now() - birth.getTime();
+    return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+  }
+
+  const scriptURL = 'https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLhL0OsvpwOx24bdAN5He_RO6Rw5V3ocbEQEeretyn4iC8PiulW1Ms2zdOCkfI4oQCid5SK0YTXRhv-mFFKyociw6J3QJSpUkt4NiMyVoQN9mlbYKA1v6Uk8bOLNg7Q6S1heo6RQX2J3B4dgn_Rr5sAE3SKbpEynu_O0BdW3Z4PyF3s3qhX8HHdTxkaLJ4gGVz8V2_3vWfCqIh-WVovEt_UGE1kSCFNsHJmmLOKfaB2pvdqWVJ42tPn0jGCKdtV3nJBFm4NGnUEyTui2naJI8JaPaSDOuo4eMo9OjCdV&lib=MHnpweNuT6kWzrVxeb4EIfn3ussjxLWrt';
+
+  // Fetch data and populate the member table
+  fetch(scriptURL)
+    .then(resp => {
+      if (!resp.ok) throw new Error(`HTTP error! status: ${resp.status}`);
+      return resp.json();
+    })
+    .then(data => {
+      tableBody.innerHTML = '';
+      data.forEach(member => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${member.Name || ''}</td>
+          <td>${member.Address || ''}</td>
+          <td>${member.Village || ''}</td>
+        `;
+        tr.addEventListener("click", () => showModal(member));
+        tableBody.appendChild(tr);
+      });
+    })
+    .catch(err => {
+      console.error("Error fetching data:", err);
+      tableBody.innerHTML = '<tr><td colspan="3">Failed to load data.</td></tr>';
+    });
+
+  // Show modal with member and spouse side-by-side details
+  function showModal(member) {
+    // Build rows for main member and spouse side-by-side
+    let rows = "";
+    for (let i = 0; i < mainFields.length; i++) {
+      const label = mainFields[i].label;
+      const mainValRaw = member[mainFields[i].key] || "";
+      const spouseValRaw = spouseFields[i] ? (member[spouseFields[i].key] || "") : "";
+
+      // Only age for DOB fields
+      const mainVal = (mainFields[i].key.includes("DOB") && mainValRaw) ? `${getAge(mainValRaw)} yrs` : mainValRaw;
+      const spouseVal = (spouseFields[i] && spouseFields[i].key.includes("DOB") && spouseValRaw) ? `${getAge(spouseValRaw)} yrs` : spouseValRaw;
+
+      if (!mainVal && !spouseVal) continue;
+
+      rows += `
+        <tr>
+          <th>${label}</th>
+          <td>${mainVal || "-"}</td>
+          <td>${spouseVal || "-"}</td>
+        </tr>
+      `;
+    }
+
+    // Children info
+    let childrenHTML = "";
+    if (member.Children || member.Child1) {
+      childrenHTML += `<h3>Children</h3><table class="children-table" aria-label="Children Information"><tbody>`;
+      if (member.Child1) {
+        const childAge = member["Child DOB"] ? `${getAge(member["Child DOB"])} yrs` : member["Child DOB"] || "";
+        childrenHTML += `
+          <tr>
+            <th>Child Name</th><td>${member.Child1}</td>
+            <th>Child DOB</th><td>${childAge}</td>
+          </tr>
+        `;
+      }
+      // Add more children here if needed
+      childrenHTML += `</tbody></table>`;
+    }
+
+    modalBody.innerHTML = `
+      <div class="popup-image">
+        <img src="${member.Image || 'https://via.placeholder.com/180'}" alt="${member.Name || 'No Image'}" />
+      </div>
+      <div class="popup-details">
+        <h2>${member.Name || ""} & ${member.Name1 || ""}</h2>
+        <table class="details-table" aria-label="Member and Spouse Details">
+          <thead>
+            <tr>
+              <th></th>
+              <th>${member.Name || "Member"}</th>
+              <th>${member.Name1 || "Spouse"}</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows}
+          </tbody>
+        </table>
+        ${childrenHTML}
+      </div>
+    `;
+
+    modal.style.display = "block";
+    modal.setAttribute('aria-hidden', 'false');
+  }
+
+  closeBtn.addEventListener('click', () => {
+    modal.style.display = "none";
+    modal.setAttribute('aria-hidden', 'true');
+  });
+
+  window.addEventListener('click', e => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+      modal.setAttribute('aria-hidden', 'true');
+    }
+  });
+
+  // Close modal on ESC key
+  window.addEventListener('keydown', e => {
+    if (e.key === "Escape" && modal.style.display === "block") {
+      modal.style.display = "none";
+      modal.setAttribute('aria-hidden', 'true');
+    }
+  });
+</script>
+
+</body>
+</html>
+ 
