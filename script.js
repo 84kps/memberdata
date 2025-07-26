@@ -1,48 +1,46 @@
-const sheetURL = 'https://script.google.com/macros/s/AKfycbwMpqHDKB-NIZ27hjjk7UnoY_KgMFB_7iVbbqwvoe0Y4fGzM1VZIbKfEHu_AsrKx00upg/exec';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbw5MTPfQV6XNPLxqha6wvJeLzsfUJRpSVBO-iRhgLUGYG5E6Zp4dhRu-v_mlJXPVi01wA/exec';
 
-fetch(sheetURL)
-  .then(response => response.json())
-  .then(data => {
-    const tableBody = document.getElementById('memberTableBody');
-    data.forEach((member, index) => {
-      const name = member["What is your Name?"] || "Unnamed";
-      const village = member["What is your Village?"] || "-";
-      const suburb = member["What is your current Residential Address?"] || "-";
+async function fetchMembers() {
+  const response = await fetch(SHEET_URL);
+  const members = await response.json();
+  const tableBody = document.querySelector('#memberTable tbody');
 
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td><a href="#" onclick="showModal(${index})">${name}</a></td>
-        <td>${village}</td>
-        <td>${suburb}</td>
-      `;
-      tableBody.appendChild(row);
-    });
-    window.allMembers = data;
+  members.forEach((member, index) => {
+    const row = document.createElement('tr');
+    row.innerHTML = `<td>${member.Name}</td><td>${member.Suburb}</td>`;
+    row.addEventListener('click', () => showMemberModal(member));
+    tableBody.appendChild(row);
   });
+}
 
-function showModal(index) {
-  const member = window.allMembers[index];
+function showMemberModal(member) {
   const modal = document.getElementById('memberModal');
-  const overlay = document.getElementById('overlay');
-  const content = document.getElementById('modalContent');
+  const body = document.getElementById('modalBody');
 
-  content.innerHTML = `
-    <h2>${member["What is your Name?"]}</h2>
-    ${member["Please upload a photograph."] ? `<img src="${member["Please upload a photograph."]}" alt="Photo">` : ""}
-    <p><strong>DOB:</strong> ${member["What is your Date of Birth?"] || "-"}</p>
-    <p><strong>Phone:</strong> ${member["What is your Phone Number?"] || "-"}</p>
-    <p><strong>Email:</strong> ${member["What is your Email address?"] || "-"}</p>
-    <p><strong>Village:</strong> ${member["What is your Village?"] || "-"}</p>
-    <p><strong>Occupation:</strong> ${member["What is your current occupation?\n(If you are self-employed or run a business, please include the name of your business.)"] || "-"}</p>
-    <p><strong>Partner:</strong> ${member["What is your Partner's Name?"] || "-"}</p>
-    <p><strong>Children:</strong> ${member["What is your child’s full name?"] || "None"}</p>
+  body.innerHTML = `
+    <img src="${member.PhotoURL}" alt="Member Photo">
+    <h2>${member.Name}</h2>
+    <p><strong>Suburb:</strong> ${member.Suburb}</p>
+    <p><strong>Village:</strong> ${member.Village}</p>
+    <p><strong>Marital Status:</strong> ${member.MaritalStatus || 'Unmarried'}</p>
+    ${member.PartnerName ? `<p><strong>Partner:</strong> ${member.PartnerName}</p>` : ''}
+    ${member.Children ? `<p><strong>Children:</strong> ${member.Children}</p>` : ''}
+    <p><strong>Phone:</strong> ${member.Phone}</p>
+    <p><strong>Email:</strong> ${member.Email}</p>
+    <p><strong>Address:</strong> ${member.Address}</p>
   `;
 
-  modal.style.display = "block";
-  overlay.style.display = "block";
+  modal.style.display = 'block';
 }
 
-function closeModal() {
-  document.getElementById('memberModal').style.display = "none";
-  document.getElementById('overlay').style.display = "none";
-}
+document.querySelector('.close').addEventListener('click', () => {
+  document.getElementById('memberModal').style.display = 'none';
+});
+
+window.addEventListener('click', e => {
+  if (e.target.classList.contains('modal')) {
+    document.getElementById('memberModal').style.display = 'none';
+  }
+});
+
+fetchMembers();

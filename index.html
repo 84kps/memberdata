@@ -1,37 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Shree 84 Samaj Members</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>Member Directory</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>Shree 84 Samaj Kadva Patidar Family</h1>
-  </header>
+  <h1>Shree 84 Samaj Members</h1>
+  <table id="memberTable">
+    <thead>
+      <tr><th>Name</th><th>Suburb</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
-  <main>
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Village</th>
-            <th>Suburb</th>
-          </tr>
-        </thead>
-        <tbody id="memberTableBody"></tbody>
-      </table>
+  <div id="memberModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div class="modal-body" id="modalBody"></div>
     </div>
-  </main>
-
-  <div class="modal" id="memberModal">
-    <div class="modal-content" id="modalContent"></div>
-    <button class="close-btn" onclick="closeModal()">✖ Close</button>
   </div>
-
-  <div class="overlay" id="overlay" onclick="closeModal()"></div>
 
   <script src="script.js"></script>
 </body>
