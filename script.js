@@ -7,6 +7,17 @@ fetch(endpoint)
     setupModal(data);
   });
 
+function getDriveImageUrl(url) {
+  if (!url) return "";
+  // Try to extract Google Drive file ID from URL
+  const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if (match && match[1]) {
+    return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+  }
+  // If URL is already a direct link or different, return as is
+  return url;
+}
+
 function renderTable(data) {
   const tbody = document.querySelector("#memberTable tbody");
   tbody.innerHTML = "";
@@ -43,13 +54,11 @@ function setupModal(data) {
 }
 
 function generateModalContent(member) {
-  const photo = member.Image?.includes("drive.google.com")
-    ? member.Image.replace("/open?", "/uc?export=view&")
-    : member.Image;
+  const photo = getDriveImageUrl(member.Image);
 
   return `
     <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-      <img src="${photo}" class="member-photo" alt="Photo" />
+      <img src="${photo}" class="member-photo" alt="Photo of ${member.Name}" />
       <table class="details-table">
         <tr><th colspan="2">${member.Name}</th><th colspan="2">${member.Name1 || "Not Married"}</th></tr>
         <tr><td><b>Age:</b></td><td>${calculateAge(member.DOB)}</td><td><b>Age:</b></td><td>${member.DOB1 ? calculateAge(member.DOB1) : ""}</td></tr>
