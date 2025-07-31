@@ -1,4 +1,5 @@
-const scriptURL = 'https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLhL0OsvpwOx24bdAN5He_RO6Rw5V3ocbEQEeretyn4iC8PiulW1Ms2zdOCkfI4oQCid5SK0YTXRhv-mFFKyociw6J3QJSpUkt4NiMyVoQN9mlbYKA1v6Uk8bOLNg7Q6S1heo6RQX2J3B4dgn_Rr5sAE3SKbpEynu_O0BdW3Z4PyF3s3qhX8HHdTxkaLJ4gGVz8V2_3vWfCqIh-WVovEt_UGE1kSCFNsHJmmLOKfaB2pvdqWVJ42tPn0jGCKdtV3nJBFm4NGnUEyTui2naJI8JaPaSDOuo4eMo9OjCdV&lib=MHnpweNuT6kWzrVxeb4EIfn3ussjxLWrt';
+
+const scriptURL = 'https://script.google.com/macros/s/AKfycbzzWNLdFZLqC8HdFdOG-_taTYQclurfb3B-SJZtcuX4GljLWKFx1sby1R9vv4WUi6MwMw/exec';
 
 const tableBody = document.querySelector('#memberTable tbody');
 const modal = document.getElementById('memberModal');
@@ -111,8 +112,9 @@ function showModal(member) {
   modal.style.display = 'block';
   modal.setAttribute('aria-hidden', 'false');
   
-  modalImage.src = member.Image || 'https://via.placeholder.com/180';
-  modalImage.alt = member.Name || 'Member Photo';
+ modalImage.src = member.Image || member.ImageLink || 'https://via.placeholder.com/180';
+modalImage.alt = member.Name || 'Member Photo';
+modalImage.style.display = 'block'; 
 
   const hasSpouse = member.Name1 && member.Name1.trim() !== '';
 

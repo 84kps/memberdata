@@ -137,6 +137,7 @@ tbody tr:hover {
 .popup-image {
   align-self: center;
   max-width: 180px;
+  min-height: 220px;
   background: #fafafa;
   display: flex;
   justify-content: center;
@@ -148,10 +149,15 @@ tbody tr:hover {
 }
 
 .popup-image img {
+  display: block;
   max-width: 100%;
+  height: auto;
+  max-height: 220px;
+  width: auto;
+  object-fit: contain;
   border-radius: 12px;
-  object-fit: cover;
 }
+
 
 /* Modal Text Content */
 .popup-details {
@@ -238,5 +244,22 @@ tbody tr:hover {
 
   .details-table td {
     width: auto;
+  }
+}
+
+@media (max-width: 720px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  table {
+    transform: scale(0.85);
+    transform-origin: top center;
+    margin: 10px auto 30px auto;
+  }
+
+  .modal-content {
+    transform: scale(0.85);
+    transform-origin: top center;
   }
 }
